@@ -161,11 +161,19 @@ dataset.PascalVOC = edict()
 
 dataset.coco = edict()
 dataset.coco.dataset = 'coco'
-dataset.coco.image_set = 'train2014'
-dataset.coco.test_image_set = 'val2014'
-dataset.coco.root_path = 'data'
+dataset.coco.image_set = 'train2017'
+dataset.coco.test_image_set = 'val2017'
+dataset.coco.root_path = '/data'
 dataset.coco.dataset_path = 'data/coco'
 dataset.coco.NUM_CLASSES = 81
+
+dataset.fashion_kp = edict()
+dataset.fashion_kp.dataset = 'fashion_kp'
+dataset.fashion_kp.image_set = 'train2014'
+dataset.fashion_kp.test_image_set = 'val2014'
+dataset.fashion_kp.root_path = 'data'
+dataset.fashion_kp.dataset_path = 'data/fashion_kp'
+dataset.fashion_kp.NUM_CLASSES = 81
 
 
 def generate_config(_network, _dataset):
