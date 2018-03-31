@@ -38,7 +38,7 @@ class coco(IMDB):
     def __init__(self, image_set, root_path, data_path):
         """
         fill basic information to initialize imdb
-        :param image_set: train2014, val2014, test2015
+        :param image_set: train2017, val2017, test2017
         :param root_path: 'data', will write 'rpn_data', 'cache'
         :param data_path: 'data/coco'
         """
@@ -78,9 +78,8 @@ class coco(IMDB):
         return image_ids
 
     def image_path_from_index(self, index):
-        """ example: images / train2014 / COCO_train2014_000000119993.jpg """
-        filename = 'COCO_%s_%012d.jpg' % (self.data_name, index)
-        image_path = os.path.join(self.data_path, 'images', self.data_name, filename)
+        """ example: images / train2017 / 000000119993.jpg """
+        image_path = os.path.join(self.data_path, 'images', self.data_name, '%012d.jpg' % (index))
         assert os.path.exists(image_path), 'Path does not exist: {}'.format(image_path)
         return image_path
 
