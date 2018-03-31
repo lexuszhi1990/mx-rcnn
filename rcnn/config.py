@@ -169,11 +169,11 @@ dataset.coco.NUM_CLASSES = 81
 
 dataset.fashion_kp = edict()
 dataset.fashion_kp.dataset = 'fashion_kp'
-dataset.fashion_kp.image_set = 'train2014'
-dataset.fashion_kp.test_image_set = 'val2014'
+dataset.fashion_kp.image_set = 'train'
+dataset.fashion_kp.test_image_set = 'val'
 dataset.fashion_kp.root_path = 'data'
 dataset.fashion_kp.dataset_path = 'data/fashion_kp'
-dataset.fashion_kp.NUM_CLASSES = 81
+dataset.fashion_kp.NUM_CLASSES = 6
 
 
 def generate_config(_network, _dataset):
