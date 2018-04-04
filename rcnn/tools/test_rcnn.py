@@ -20,7 +20,7 @@ import pprint
 import mxnet as mx
 
 from ..logger import logger
-from ..config import config, default, generate_config
+from ..config import config, generate_config
 from ..symbol import *
 from ..dataset import *
 from ..core.loader import TestLoader
@@ -93,16 +93,16 @@ def test_rcnn(network, dataset, image_set, root_path, dataset_path,
 def parse_args():
     parser = argparse.ArgumentParser(description='Test a Fast R-CNN network')
     # general
-    parser.add_argument('--network', help='network name', default=default.network, type=str)
-    parser.add_argument('--dataset', help='dataset name', default=default.dataset, type=str)
+    parser.add_argument('--network', help='network name', type=str)
+    parser.add_argument('--dataset', help='dataset name', type=str)
     args, rest = parser.parse_known_args()
     generate_config(args.network, args.dataset)
-    parser.add_argument('--image_set', help='image_set name', default=default.test_image_set, type=str)
-    parser.add_argument('--root_path', help='output data folder', default=default.root_path, type=str)
-    parser.add_argument('--dataset_path', help='dataset path', default=default.dataset_path, type=str)
+    parser.add_argument('--image_set', help='image_set name', default=config.test_image_set, type=str)
+    parser.add_argument('--root_path', help='output data folder', default=config.root_path, type=str)
+    parser.add_argument('--dataset_path', help='dataset path', default=config.dataset_path, type=str)
     # testing
-    parser.add_argument('--prefix', help='model to test with', default=default.rcnn_prefix, type=str)
-    parser.add_argument('--epoch', help='model to test with', default=default.rcnn_epoch, type=int)
+    parser.add_argument('--prefix', help='model to test with', default=config.rcnn_prefix, type=str)
+    parser.add_argument('--epoch', help='model to test with', default=config.rcnn_epoch, type=int)
     parser.add_argument('--gpu', help='GPU device to test with', default=0, type=int)
     # rcnn
     parser.add_argument('--vis', help='turn on visualization', action='store_true')
