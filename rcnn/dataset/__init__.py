@@ -18,4 +18,4 @@
 from .imdb import IMDB
 from .pascal_voc import PascalVOC
 from .coco import coco
-from .fashion_keypoint import FashionKeypoint
+from .fashion_keypoint import FashionKeypoint as fashionai_kp
