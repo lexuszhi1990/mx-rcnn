@@ -113,8 +113,7 @@ class FashionKeypoint(IMDB):
             y1 = np.max((0, y))
             x2 = np.min((width - 1, x1 + np.max((0, w - 1))))
             y2 = np.min((height - 1, y1 + np.max((0, h - 1))))
-            # if obj['area'] > 0 and x2 >= x1 and y2 >= y1:
-            if x2 >= x1 and y2 >= y1:
+            if obj['area'] > 0 and x2 >= x1 and y2 >= y1:
                 obj['clean_bbox'] = [x1, y1, x2, y2]
                 valid_objs.append(obj)
         objs = valid_objs
@@ -191,10 +190,10 @@ class FashionKeypoint(IMDB):
         return results
 
     def _do_python_eval(self, res_file, res_folder):
-        ann_type = 'bbox'
+        iouType='bbox'
+
         coco_dt = self.coco.loadRes(res_file)
-        coco_eval = COCOeval(self.coco, coco_dt)
-        coco_eval.params.useSegm = (ann_type == 'segm')
+        coco_eval = COCOeval(self.coco, coco_dt, iouType=iouType)
         coco_eval.evaluate()
         coco_eval.accumulate()
         self._print_detection_metrics(coco_eval)
