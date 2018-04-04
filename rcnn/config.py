@@ -105,43 +105,51 @@ config.TEST.PROPOSAL_MIN_SIZE = config.RPN_FEAT_STRIDE
 # RCNN nms
 config.TEST.NMS = 0.3
 
-# default settings
-default = edict()
+# # default settings
+# default = edict()
 
-# default network
-default.network = 'vgg'
-default.pretrained = 'model/vgg16'
-default.pretrained_epoch = 0
-default.base_lr = 0.001
-# default dataset
-default.dataset = 'PascalVOC'
-default.image_set = '2007_train'
-default.test_image_set = '2012_test'
-default.root_path = 'data'
-default.dataset_path = 'data/VOCdevkit'
-# default training
-default.frequent = 20
-default.kvstore = 'device'
-# default e2e
-default.e2e_prefix = 'model/e2e'
-default.e2e_epoch = 10
-default.e2e_lr = default.base_lr
-default.e2e_lr_step = '7'
-# default rpn
-default.rpn_prefix = 'model/rpn'
-default.rpn_epoch = 8
-default.rpn_lr = default.base_lr
-default.rpn_lr_step = '6'
-# default rcnn
-default.rcnn_prefix = 'model/rcnn'
-default.rcnn_epoch = 8
-default.rcnn_lr = default.base_lr
-default.rcnn_lr_step = '6'
+# # default network
+# default.network = 'vgg'
+# default.pretrained = 'model/vgg16'
+# default.pretrained_epoch = 0
+# default.base_lr = 0.001
+# # default dataset
+# default.dataset = 'PascalVOC'
+# default.image_set = '2007_train'
+# default.test_image_set = '2012_test'
+# default.root_path = 'data'
+# default.dataset_path = 'data/VOCdevkit'
+# # default training
+# default.frequent = 20
+# default.kvstore = 'device'
+# # default e2e
+# default.e2e_prefix = 'model/e2e'
+# default.e2e_epoch = 10
+# default.e2e_lr = default.base_lr
+# default.e2e_lr_step = '7'
+# # default rpn
+# default.rpn_prefix = 'model/rpn'
+# default.rpn_epoch = 8
+# default.rpn_lr = default.base_lr
+# default.rpn_lr_step = '6'
+# # default rcnn
+# default.rcnn_prefix = 'model/rcnn'
+# default.rcnn_epoch = 8
+# default.rcnn_lr = default.base_lr
+# default.rcnn_lr_step = '6'
 
 # network settings
 network = edict()
 
 network.vgg = edict()
+network.vgg.pretrained = '/mnt/models/vgg16'
+network.vgg.pretrained_epoch = 0
+network.vgg.PIXEL_MEANS = np.array([0, 0, 0])
+network.vgg.IMAGE_STRIDE = 0
+network.vgg.RPN_FEAT_STRIDE = 16
+network.vgg.RCNN_FEAT_STRIDE = 16
+network.vgg.FIXED_PARAMS = ['conv1', 'conv2']
+network.vgg.FIXED_PARAMS_SHARED = ['conv1', 'conv2', 'conv3', 'conv4', 'conv5']
 
 network.resnet = edict()
 # network.resnet.pretrained = 'model/resnet-101'
@@ -167,24 +175,38 @@ dataset.coco.root_path = '/data'
 dataset.coco.dataset_path = 'data/coco'
 dataset.coco.NUM_CLASSES = 81
 
-dataset.fashion_kp = edict()
-dataset.fashion_kp.dataset = 'fashion_kp'
-dataset.fashion_kp.image_set = 'train'
-dataset.fashion_kp.test_image_set = 'val'
-dataset.fashion_kp.root_path = 'data'
-dataset.fashion_kp.dataset_path = 'data/fashion_kp'
-dataset.fashion_kp.NUM_CLASSES = 6
-
+dataset.fashionai_kp = edict()
+dataset.fashionai_kp.dataset = 'fashionai_kp'
+dataset.fashionai_kp.image_set = 'train'
+dataset.fashionai_kp.test_image_set = 'val'
+# default config
+dataset.fashionai_kp.NUM_CLASSES = 6
+dataset.fashionai_kp.SCALES = [(312, 512)]  # first is scale (the shorter side); second is max size
+dataset.fashionai_kp.ANCHOR_SCALES = (8, 16, 32)
+dataset.fashionai_kp.ANCHOR_RATIOS = (0.5, 1, 2)
+dataset.fashionai_kp.NUM_ANCHORS = len(dataset.fashionai_kp.ANCHOR_SCALES) * len(dataset.fashionai_kp.ANCHOR_RATIOS)
+# training config list
+dataset.fashionai_kp.vis = True
+dataset.fashionai_kp.base_lr = 0.005
+dataset.fashionai_kp.root_path = '/mnt/data/build'
+dataset.fashionai_kp.dataset_path = '/mnt/data'
+dataset.fashionai_kp.frequent = 20
+dataset.fashionai_kp.kvstore = 'device'
+dataset.fashionai_kp.e2e_prefix = '/mnt/models/e2e-coco'
+dataset.fashionai_kp.e2e_epoch = 10
+dataset.fashionai_kp.e2e_lr = 0.001
+dataset.fashionai_kp.e2e_lr_step = '7'
+dataset.fashionai_kp.rpn_prefix = '/mnt/models/rpn'
+dataset.fashionai_kp.rpn_epoch = 8
+dataset.fashionai_kp.rpn_lr = 0.001
+dataset.fashionai_kp.rpn_lr_step = '6'
+dataset.fashionai_kp.rcnn_prefix = '/mnt/models/rcnn'
+dataset.fashionai_kp.rcnn_epoch = 8
+dataset.fashionai_kp.rcnn_lr = 0.001
+dataset.fashionai_kp.rcnn_lr_step = '6'
 
 def generate_config(_network, _dataset):
     for k, v in network[_network].items():
-        if k in config:
-            config[k] = v
-        elif k in default:
-            default[k] = v
+        config[k] = v
     for k, v in dataset[_dataset].items():
-        if k in config:
-            config[k] = v
-        elif k in default:
-            default[k] = v
-
+        config[k] = v
