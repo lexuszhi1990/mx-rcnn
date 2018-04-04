@@ -7,6 +7,7 @@ import os
 import pickle
 import numpy as np
 import time
+import json
 
 from ..logger import logger
 from .imdb import IMDB

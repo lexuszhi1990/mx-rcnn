@@ -17,12 +17,12 @@
 # specific language governing permissions and limitations
 # under the License.
 
-# python3.6 train_end2end_fashionai.py \
-#         --network vgg \
-#         --dataset fashionai_kp \
-#         --gpus 5
+# CUDA_VISIBLE_DEVICES=3 python3.6 train_end2end_fashionai.py \
+#     --network vgg \
+#     --dataset fashionai_kp \
+#     --gpus 0
 
-python3.6 test.py \
+CUDA_VISIBLE_DEVICES=3 python3.6 test.py \
         --network vgg \
         --dataset fashionai_kp \
-        --gpus 5 \
+        --gpus 0
