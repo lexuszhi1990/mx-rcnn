@@ -69,7 +69,7 @@ class FashionKeypoint(IMDB):
 
     def image_path_from_index(self, im_ann):
         """ example: images / train2017 / 000000119993.jpg """
-        img_path = Path(self.data_path, 'images', im_ann['category'], im_ann['file_name'])
+        img_path = Path(self.data_path, 'images', self.image_set, im_ann['category'], im_ann['file_name'])
         assert img_path.exists(), 'image %s not exists' % img_path
         return img_path.as_posix()
 
