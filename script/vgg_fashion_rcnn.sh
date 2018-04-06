@@ -22,7 +22,7 @@
 #     --dataset fashionai_kp \
 #     --gpus 0
 
-CUDA_VISIBLE_DEVICES=3 python3.6 test.py \
+CUDA_VISIBLE_DEVICES=7 python3.6 test.py \
         --network vgg \
         --dataset fashionai_kp \
         --gpus 0
