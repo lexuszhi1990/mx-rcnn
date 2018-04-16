@@ -144,9 +144,16 @@ config.TEST.NMS = 0.3
 network = edict()
 
 network.vgg = edict()
+# dataset config
+network.vgg.NUM_CLASSES = 21
+network.vgg.SCALES = [(600, 1000)]
+network.vgg.ANCHOR_SCALES = (8, 16, 32)
+network.vgg.ANCHOR_RATIOS = (0.5, 1, 2)
+network.vgg.NUM_ANCHORS = len(network.vgg.ANCHOR_SCALES) * len(network.vgg.ANCHOR_RATIOS)
+# model config
 network.vgg.pretrained = './model/vgg16'
 network.vgg.pretrained_epoch = 0
-network.vgg.PIXEL_MEANS = np.array([0, 0, 0])
+network.vgg.PIXEL_MEANS = np.array([103.939, 116.779, 123.68])
 network.vgg.IMAGE_STRIDE = 0
 network.vgg.RPN_FEAT_STRIDE = 16
 network.vgg.RCNN_FEAT_STRIDE = 16
