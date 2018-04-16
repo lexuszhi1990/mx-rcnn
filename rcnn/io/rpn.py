@@ -118,13 +118,12 @@ def assign_anchor(feat_shape, gt_boxes, im_info, feat_stride=16,
     num_anchors = base_anchors.shape[0]
     feat_height, feat_width = feat_shape[-2:]
 
-    logger.debug('anchors: %s' % base_anchors)
-    logger.debug('anchor shapes: %s' % np.hstack((base_anchors[:, 2::4] - base_anchors[:, 0::4],
-                                                 base_anchors[:, 3::4] - base_anchors[:, 1::4])))
-    logger.debug('im_info %s' % im_info)
-    logger.debug('height %d width %d' % (feat_height, feat_width))
-    logger.debug('gt_boxes shape %s' % np.array(gt_boxes.shape))
-    logger.debug('gt_boxes %s' % gt_boxes)
+    logger.info('anchors: %s' % base_anchors)
+    logger.info('anchor shapes: %s' % np.hstack((base_anchors[:, 2::4] - base_anchors[:, 0::4], base_anchors[:, 3::4] - base_anchors[:, 1::4])))
+    logger.info('im_info %s' % im_info)
+    logger.info('height %d width %d' % (feat_height, feat_width))
+    logger.info('gt_boxes shape %s' % np.array(gt_boxes.shape))
+    logger.info('gt_boxes %s' % gt_boxes)
 
     # 1. generate proposals from bbox deltas and shifted anchors
     shift_x = np.arange(0, feat_width) * feat_stride
@@ -146,12 +145,12 @@ def assign_anchor(feat_shape, gt_boxes, im_info, feat_stride=16,
                            (all_anchors[:, 1] >= -allowed_border) &
                            (all_anchors[:, 2] < im_info[1] + allowed_border) &
                            (all_anchors[:, 3] < im_info[0] + allowed_border))[0]
-    logger.debug('total_anchors %d' % total_anchors)
-    logger.debug('inds_inside %d' % len(inds_inside))
+    logger.info('total_anchors %d' % total_anchors)
+    logger.info('inds_inside %d' % len(inds_inside))
 
     # keep only inside anchors
     anchors = all_anchors[inds_inside, :]
-    logger.debug('anchors shape %s' % np.array(anchors.shape))
+    logger.info('anchors shape %s' % np.array(anchors.shape))
 
     # label: 1 is positive, 0 is negative, -1 is dont care
     labels = np.empty((len(inds_inside),), dtype=np.float32)
@@ -188,7 +187,7 @@ def assign_anchor(feat_shape, gt_boxes, im_info, feat_stride=16,
     fg_inds = np.where(labels == 1)[0]
     if len(fg_inds) > num_fg:
         disable_inds = npr.choice(fg_inds, size=(len(fg_inds) - num_fg), replace=False)
-        if logger.level == logging.DEBUG:
+        if config.DEBUG:
             disable_inds = fg_inds[:(len(fg_inds) - num_fg)]
         labels[disable_inds] = -1
 
@@ -197,7 +196,7 @@ def assign_anchor(feat_shape, gt_boxes, im_info, feat_stride=16,
     bg_inds = np.where(labels == 0)[0]
     if len(bg_inds) > num_bg:
         disable_inds = npr.choice(bg_inds, size=(len(bg_inds) - num_bg), replace=False)
-        if logger.level == logging.DEBUG:
+        if config.DEBUG:
             disable_inds = bg_inds[:(len(bg_inds) - num_bg)]
         labels[disable_inds] = -1
 
@@ -208,30 +207,30 @@ def assign_anchor(feat_shape, gt_boxes, im_info, feat_stride=16,
     bbox_weights = np.zeros((len(inds_inside), 4), dtype=np.float32)
     bbox_weights[labels == 1, :] = np.array(config.TRAIN.RPN_BBOX_WEIGHTS)
 
-    if logger.level == logging.DEBUG:
+    if config.DEBUG:
         _sums = bbox_targets[labels == 1, :].sum(axis=0)
         _squared_sums = (bbox_targets[labels == 1, :] ** 2).sum(axis=0)
         _counts = np.sum(labels == 1)
         means = _sums / (_counts + 1e-14)
         stds = np.sqrt(_squared_sums / _counts - means ** 2)
-        logger.debug('means %s' % means)
-        logger.debug('stdevs %s' % stds)
+        logger.info('means %s' % means)
+        logger.info('stdevs %s' % stds)
 
     # map up to original set of anchors
     labels = _unmap(labels, total_anchors, inds_inside, fill=-1)
     bbox_targets = _unmap(bbox_targets, total_anchors, inds_inside, fill=0)
     bbox_weights = _unmap(bbox_weights, total_anchors, inds_inside, fill=0)
 
-    if logger.level == logging.DEBUG:
+    if config.DEBUG:
         if gt_boxes.size > 0:
-            logger.debug('rpn: max max_overlaps %f' % np.max(max_overlaps))
-        logger.debug('rpn: num_positives %f' % np.sum(labels == 1))
-        logger.debug('rpn: num_negatives %f' % np.sum(labels == 0))
+            logger.info('rpn: max max_overlaps %f' % np.max(max_overlaps))
+        logger.info('rpn: num_positives %f' % np.sum(labels == 1))
+        logger.info('rpn: num_negatives %f' % np.sum(labels == 0))
         _fg_sum = np.sum(labels == 1)
         _bg_sum = np.sum(labels == 0)
         _count = 1
-        logger.debug('rpn: num_positive avg %f' % (_fg_sum / _count))
-        logger.debug('rpn: num_negative avg %f' % (_bg_sum / _count))
+        logger.info('rpn: num_positive avg %f' % (_fg_sum / _count))
+        logger.info('rpn: num_negative avg %f' % (_bg_sum / _count))
 
     labels = labels.reshape((1, feat_height, feat_width, A)).transpose(0, 3, 1, 2)
     labels = labels.reshape((1, A * feat_height * feat_width))

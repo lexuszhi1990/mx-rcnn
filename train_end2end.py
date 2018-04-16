@@ -21,7 +21,7 @@ import mxnet as mx
 import numpy as np
 
 from rcnn.logger import logger
-from rcnn.config import config, default, generate_config
+from rcnn.config import config, generate_config
 from rcnn.symbol import *
 from rcnn.core import callback, metric
 from rcnn.core.loader import AnchorLoader
@@ -165,29 +165,31 @@ def train_net(args, ctx, pretrained, epoch, prefix, begin_epoch, end_epoch,
 def parse_args():
     parser = argparse.ArgumentParser(description='Train Faster R-CNN network')
     # general
-    parser.add_argument('--network', help='network name', default=default.network, type=str)
-    parser.add_argument('--dataset', help='dataset name', default=default.dataset, type=str)
+    parser.add_argument('--network', help='network name', type=str)
+    parser.add_argument('--dataset', help='dataset name', type=str)
+    parser.add_argument('--cpu', help='CPU device to train', action='store_true', default=True)
+    parser.add_argument('--gpus', help='GPU device to train with', default='0', type=str)
     args, rest = parser.parse_known_args()
     generate_config(args.network, args.dataset)
-    parser.add_argument('--image_set', help='image_set name', default=default.image_set, type=str)
-    parser.add_argument('--root_path', help='output data folder', default=default.root_path, type=str)
-    parser.add_argument('--dataset_path', help='dataset path', default=default.dataset_path, type=str)
+
+    parser.add_argument('--image_set', help='image_set name', default=config.image_set, type=str)
+    parser.add_argument('--root_path', help='output data folder', default=config.root_path, type=str)
+    parser.add_argument('--dataset_path', help='dataset path', default=config.dataset_path, type=str)
     # training
-    parser.add_argument('--frequent', help='frequency of logging', default=default.frequent, type=int)
-    parser.add_argument('--kvstore', help='the kv-store type', default=default.kvstore, type=str)
+    parser.add_argument('--frequent', help='frequency of logging', default=config.frequent, type=int)
+    parser.add_argument('--kvstore', help='the kv-store type', default=config.kvstore, type=str)
     parser.add_argument('--work_load_list', help='work load for different devices', default=None, type=list)
     parser.add_argument('--no_flip', help='disable flip images', action='store_true', default=True)
     parser.add_argument('--no_shuffle', help='disable random shuffle', action='store_true')
     parser.add_argument('--resume', help='continue training', action='store_true', default=False)
     # e2e
-    parser.add_argument('--gpus', help='GPU device to train with', default='0', type=str)
-    parser.add_argument('--pretrained', help='pretrained model prefix', default=default.pretrained, type=str)
-    parser.add_argument('--pretrained_epoch', help='pretrained model epoch', default=default.pretrained_epoch, type=int)
-    parser.add_argument('--prefix', help='new model prefix', default=default.e2e_prefix, type=str)
+    parser.add_argument('--pretrained', help='pretrained model prefix', default=config.pretrained, type=str)
+    parser.add_argument('--pretrained_epoch', help='pretrained model epoch', default=config.pretrained_epoch, type=int)
+    parser.add_argument('--prefix', help='new model prefix', default=config.e2e_prefix, type=str)
     parser.add_argument('--begin_epoch', help='begin epoch of training, use with resume', default=0, type=int)
-    parser.add_argument('--end_epoch', help='end epoch of training', default=default.e2e_epoch, type=int)
-    parser.add_argument('--lr', help='base learning rate', default=default.e2e_lr, type=float)
-    parser.add_argument('--lr_step', help='learning rate steps (in epoch)', default=default.e2e_lr_step, type=str)
+    parser.add_argument('--end_epoch', help='end epoch of training', default=config.e2e_epoch, type=int)
+    parser.add_argument('--lr', help='base learning rate', default=config.e2e_lr, type=float)
+    parser.add_argument('--lr_step', help='learning rate steps (in epoch)', default=config.e2e_lr_step, type=str)
     args = parser.parse_args()
     return args
 
@@ -195,7 +197,8 @@ def parse_args():
 def main():
     args = parse_args()
     logger.info('Called with argument: %s' % args)
-    ctx = [mx.gpu(int(i)) for i in args.gpus.split(',')]
+
+    ctx = [mx.cpu()] if args.cpu else [mx.gpu(int(i)) for i in args.gpus.split(',')]
     train_net(args, ctx, args.pretrained, args.pretrained_epoch, args.prefix, args.begin_epoch, args.end_epoch,
               lr=args.lr, lr_step=args.lr_step)
 

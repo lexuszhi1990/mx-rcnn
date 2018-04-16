@@ -20,6 +20,8 @@ from easydict import EasyDict as edict
 
 config = edict()
 
+config.DEBUG = True
+
 # network related params
 config.PIXEL_MEANS = np.array([103.939, 116.779, 123.68])
 config.IMAGE_STRIDE = 0
@@ -142,14 +144,35 @@ config.TEST.NMS = 0.3
 network = edict()
 
 network.vgg = edict()
-network.vgg.pretrained = '/mnt/models/vgg16'
+network.vgg.pretrained = './model/vgg16'
 network.vgg.pretrained_epoch = 0
 network.vgg.PIXEL_MEANS = np.array([0, 0, 0])
 network.vgg.IMAGE_STRIDE = 0
 network.vgg.RPN_FEAT_STRIDE = 16
 network.vgg.RCNN_FEAT_STRIDE = 16
 network.vgg.FIXED_PARAMS = ['conv1', 'conv2']
+# network.vgg.FIXED_PARAMS = []
 network.vgg.FIXED_PARAMS_SHARED = ['conv1', 'conv2', 'conv3', 'conv4', 'conv5']
+network.vgg.base_lr = 0.001
+network.vgg.dataset = 'PascalVOC'
+network.vgg.image_set = '2012_train'
+network.vgg.test_image_set = '2012_val'
+network.vgg.root_path = '/mnt/ckpt/vgg-voc2012'
+network.vgg.dataset_path = '/mnt/data/VOCdevkit'
+network.vgg.frequent = 20
+network.vgg.kvstore = 'device'
+network.vgg.e2e_prefix = 'model/e2e'
+network.vgg.e2e_epoch = 10
+network.vgg.e2e_lr = 0.001
+network.vgg.e2e_lr_step = '7'
+network.vgg.rpn_prefix = 'model/rpn'
+network.vgg.rpn_epoch = 8
+network.vgg.rpn_lr = 0.001
+network.vgg.rpn_lr_step = '6'
+network.vgg.rcnn_prefix = 'model/rcnn'
+network.vgg.rcnn_epoch = 8
+network.vgg.rcnn_lr = 0.001
+network.vgg.rcnn_lr_step = '6'
 
 network.resnet = edict()
 # network.resnet.pretrained = 'model/resnet-101'

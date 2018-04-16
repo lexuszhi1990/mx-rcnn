@@ -2,7 +2,7 @@
 
 ```
 apt-get install -y python3.6-dev python3-tk
-pip3.6 install opencv-python easydict cython matplotlib ipython
+pip3.6 install opencv-python easydict cython matplotlib scikit-image
 ```
 
 ipython config:
@@ -16,6 +16,12 @@ ipython config:
 docker run --rm -it mxnet-cu90/python:1.2.0-roialign
 
 docker run --rm -it -v /home/david/fashionAI/rcnn:/app-dev -v /data/david/fai_kp:/mnt/data -v /data/david/models/fai:/mnt/models -v /data/david/cocoapi:/mnt/coco mxnet-cu90/python:1.2.0-roialign
+
+
+### local dev
+
+docker run --rm -it -v /Users/david/repo/detection/mx-rcnn:/app-dev -v /Users/david/mnt/data/VOCdevkit:/mnt/data/VOCdevkit -v /Users/david/mnt/data/ckpt:/mnt/ckpt mxnet/python:1.2.0-dev bash
+
 
 ### logs
 

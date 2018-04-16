@@ -60,10 +60,10 @@ class PascalVOC(IMDB):
                         'motorbike', 'person', 'pottedplant',
                         'sheep', 'sofa', 'train', 'tvmonitor']
         # VOC_RM 13 classes
-        self.classes = ['__background__',  # always index 0
-                        'c60', 'c70', 'car_people', 'center_ring', 'cross_hatch',
-                        'diamond', 'forward_left', 'forward_right', 'forward',
-                        'left', 'right', 'u_turn', 'zebra_crossing']
+        # self.classes = ['__background__',  # always index 0
+        #                 'c60', 'c70', 'car_people', 'center_ring', 'cross_hatch',
+        #                 'diamond', 'forward_left', 'forward_right', 'forward',
+        #                 'left', 'right', 'u_turn', 'zebra_crossing']
         self.num_classes = len(self.classes)
         self.image_set_index = self.load_image_set_index()
         self.num_images = len(self.image_set_index)
@@ -106,27 +106,27 @@ class PascalVOC(IMDB):
             logger.info('%s gt roidb loaded from %s' % (self.name, cache_file))
             return roidb
 
-        gt_roidb = [self.load_pascal_annotation(index) for index in self.image_set_index]
+        gt_roidb = [self.load_pascal_annotation(index, img_id) for index,img_id in enumerate(self.image_set_index)]
         with open(cache_file, 'wb') as fid:
             pickle.dump(gt_roidb, fid, pickle.HIGHEST_PROTOCOL)
         logger.info('%s wrote gt roidb to %s' % (self.name, cache_file))
 
         return gt_roidb
 
-    def load_pascal_annotation(self, index):
+    def load_pascal_annotation(self, index, img_id):
         """
-        for a given index, load image and bounding boxes info from XML file
-        :param index: index of a specific image
+        for a given img_id, load image and bounding boxes info from XML file
+        :param img_id: img_id of a specific image
         :return: record['boxes', 'gt_classes', 'gt_overlaps', 'flipped']
         """
         import xml.etree.ElementTree as ET
         roi_rec = dict()
-        roi_rec['image'] = self.image_path_from_index(index)
+        roi_rec['image'] = self.image_path_from_index(img_id)
         size = cv2.imread(roi_rec['image']).shape
         roi_rec['height'] = size[0]
         roi_rec['width'] = size[1]
 
-        filename = os.path.join(self.data_path, 'Annotations', index + '.xml')
+        filename = os.path.join(self.data_path, 'Annotations', img_id + '.xml')
         tree = ET.parse(filename)
         objs = tree.findall('object')
         if not self.config['use_diff']:
@@ -158,6 +158,7 @@ class PascalVOC(IMDB):
                         'max_classes': overlaps.argmax(axis=1),
                         'max_overlaps': overlaps.max(axis=1),
                         'flipped': False})
+        logger.info("[%d/%s] %s"%(index, len(self.image_set_index), filename))
         return roi_rec
 
     def load_selective_search_roidb(self, gt_roidb):
