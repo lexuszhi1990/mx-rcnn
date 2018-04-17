@@ -167,7 +167,7 @@ def parse_args():
     # general
     parser.add_argument('--network', help='network name', type=str)
     parser.add_argument('--dataset', help='dataset name', type=str)
-    parser.add_argument('--cpu', help='CPU device to train', action='store_true', default=True)
+    parser.add_argument('--cpu', help='CPU device to train', action='store_true')
     parser.add_argument('--gpus', help='GPU device to train with', default='0', type=str)
     args, rest = parser.parse_known_args()
     generate_config(args.network, args.dataset)

@@ -26,6 +26,6 @@ gpu=${1:0:1}
 export MXNET_CUDNN_AUTOTUNE_DEFAULT=0
 export PYTHONUNBUFFERED=1
 
-python3.6 train_end2end.py --network vgg --dataset PascalVOC --cpu
-# python train_end2end.py --image_set 2012_trainval --gpu $1
-# python test.py --gpu $gpu
+# python3.6 train_end2end.py --network vgg --dataset PascalVOC --cpu
+python3.6 train_end2end.py --network vgg --dataset PascalVOC --gpu 0
+# python3.6 test.py --gpu $gpu
