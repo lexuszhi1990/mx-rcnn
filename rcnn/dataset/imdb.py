@@ -74,7 +74,7 @@ class IMDB(object):
         """
         cache_path = os.path.join(self.root_path, 'cache')
         if not os.path.exists(cache_path):
-            os.mkdir(cache_path)
+            os.makedirs(cache_path)
         return cache_path
 
     def image_path_at(self, index):
