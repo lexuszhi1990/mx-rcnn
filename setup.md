@@ -15,7 +15,9 @@ ipython config:
 
 docker run --rm -it mxnet-cu90/python:1.2.0-roialign
 
-docker run --rm -it -v /home/david/fashionAI/rcnn:/app-dev -v /data/david/fai_kp:/mnt/data -v /data/david/models/fai:/mnt/models -v /data/david/cocoapi:/mnt/coco mxnet-cu90/python:1.2.0-roialign
+docker run --rm -it -v /home/david/fashionAI/mx-rcnn:/app-dev -v /data/david/fai_kp:/mnt/data -v /data/david/models/fai:/mnt/models -v /data/david/cocoapi:/mnt/coco mxnet-cu90/python:1.2.0-roialign
+
+docker run --rm -it -v /home/fulingzhi/workspace/mx-rcnn:/app-dev -v /mnt/gf_mnt/models:/mnt/models -v /mnt/gf_mnt/datasets/cocoapi:/mnt/data/coco -v /mnt/gf_mnt/datasets/VOCtrainval_11-May-2012/VOCdevkit/VOC2012:/mnt/data/VOC2012 mxnet-cu90/python:1.2.0-roialign
 
 ### logs
 
