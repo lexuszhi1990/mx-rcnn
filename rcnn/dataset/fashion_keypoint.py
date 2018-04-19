@@ -52,7 +52,7 @@ class FashionKeypoint(IMDB):
 
     def _get_ann_file(self):
         """ self.data_path / annotations / <image_set>2014.json """
-        anno_file = Path(self.data_path, 'annotations', self.image_set+'.json')
+        anno_file = Path(self.data_path, 'Tests', self.image_set+'.json')
         assert anno_file.exists(), "anno file not exists %s " % anno_file
         return anno_file.as_posix()
 
@@ -69,7 +69,8 @@ class FashionKeypoint(IMDB):
 
     def image_path_from_index(self, im_ann):
         """ example: images / image_set / image_file_name """
-        img_path = Path(self.data_path, 'images', self.image_set, im_ann['file_name'])
+        # img_path = Path(self.data_path, 'images', self.image_set, im_ann['file_name'])
+        img_path = Path(self.data_path, im_ann['file_name'])
         assert img_path.exists(), 'image %s not exists' % img_path
         return img_path.as_posix()
 
