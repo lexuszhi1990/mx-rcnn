@@ -54,6 +54,7 @@ def test_rcnn(network, dataset, image_set, root_path, dataset_path,
 
     # load model
     arg_params, aux_params = load_param(prefix, epoch, convert=True, ctx=ctx, process=True)
+    logger.info("load model from %s, %d" % (prefix, epoch))
 
     # infer shape
     data_shape_dict = dict(test_data.provide_data)

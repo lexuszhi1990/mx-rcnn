@@ -17,6 +17,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
+export MXNET_CUDNN_AUTOTUNE_DEFAULT=0
+
 # CUDA_VISIBLE_DEVICES=3 python3.6 train_end2end_fashionai.py \
 #     --network vgg \
 #     --dataset fashionai_kp \
