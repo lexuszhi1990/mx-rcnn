@@ -18,7 +18,7 @@ docker run --rm -it mxnet-cu90/python:1.2.0-roialign
 on 172:
 ```
 # for kp
-docker run --rm -it -v /home/david/fashionAI/mx-rcnn:/app-dev -v /data/david/fai_kp:/mnt/data -v /data/david/models/fai:/mnt/models -v /data/david/cocoapi:/mnt/coco mxnet-cu90/python:1.2.0-roialign
+docker run --rm -it -v /home/david/fashionAI/mx-rcnn:/app-dev -v /data/david/fai_kp:/mnt/data/fai_kp -v /data/david/models/fai:/mnt/models -v /data/david/cocoapi:/mnt/coco mxnet-cu90/python:1.2.0-roialign
 ```
 
 ```

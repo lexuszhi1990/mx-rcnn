@@ -52,7 +52,8 @@ class FashionKeypoint(IMDB):
 
     def _get_ann_file(self):
         """ self.data_path / annotations / <image_set>2014.json """
-        anno_file = Path(self.data_path, 'Tests', self.image_set+'.json')
+        # anno_file = Path(self.data_path, 'Tests', self.image_set+'.json')
+        anno_file = Path(self.data_path, 'Annotations', self.image_set+'.json')
         assert anno_file.exists(), "anno file not exists %s " % anno_file
         return anno_file.as_posix()
 

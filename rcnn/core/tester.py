@@ -166,7 +166,7 @@ def pred_eval(predictor, test_data, imdb, vis=False, thresh=1e-3):
     nms = py_nms_wrapper(config.TEST.NMS)
 
     # limit detections to max_per_image over all classes
-    max_per_image = -1
+    max_per_image = 5
 
     num_images = imdb.num_images
     # all detections are collected into:

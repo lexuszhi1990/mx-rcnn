@@ -56,6 +56,8 @@ def filter_roidb(roidb):
     def is_valid(entry):
         """ valid images have at least 1 fg or bg roi """
         overlaps = entry['max_overlaps']
+        if len(overlaps) == 0:
+            return True
         fg_inds = np.where(overlaps >= config.TRAIN.FG_THRESH)[0]
         bg_inds = np.where((overlaps < config.TRAIN.BG_THRESH_HI) & (overlaps >= config.TRAIN.BG_THRESH_LO))[0]
         valid = len(fg_inds) > 0 or len(bg_inds) > 0

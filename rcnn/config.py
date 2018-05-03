@@ -157,8 +157,8 @@ network.vgg.PIXEL_MEANS = np.array([103.939, 116.779, 123.68])
 network.vgg.IMAGE_STRIDE = 0
 network.vgg.RPN_FEAT_STRIDE = 16
 network.vgg.RCNN_FEAT_STRIDE = 16
-network.vgg.FIXED_PARAMS = ['conv1', 'conv2']
-# network.vgg.FIXED_PARAMS = []
+# network.vgg.FIXED_PARAMS = ['conv1', 'conv2']
+network.vgg.FIXED_PARAMS = []
 network.vgg.FIXED_PARAMS_SHARED = ['conv1', 'conv2', 'conv3', 'conv4', 'conv5']
 network.vgg.base_lr = 0.001
 network.vgg.dataset = 'PascalVOC'
@@ -207,8 +207,8 @@ dataset.coco.NUM_CLASSES = 81
 
 dataset.fashionai_kp = edict()
 dataset.fashionai_kp.dataset = 'fashionai_kp'
-dataset.fashionai_kp.image_set = 'train'
-dataset.fashionai_kp.test_image_set = 'test'
+dataset.fashionai_kp.image_set = 'train_coco'
+dataset.fashionai_kp.test_image_set = 'train_coco'
 # default config
 dataset.fashionai_kp.NUM_CLASSES = 6
 dataset.fashionai_kp.SCALES = [(312, 512)]  # first is scale (the shorter side); second is max size
@@ -218,8 +218,8 @@ dataset.fashionai_kp.NUM_ANCHORS = len(dataset.fashionai_kp.ANCHOR_SCALES) * len
 # training config list
 dataset.fashionai_kp.vis = True
 dataset.fashionai_kp.base_lr = 0.005
-dataset.fashionai_kp.root_path = '/mnt/data/build'
-dataset.fashionai_kp.dataset_path = '/mnt/data/base_dataset'
+dataset.fashionai_kp.root_path = '/mnt/data/fai_attr/raw_data/ROUND2/TRAIN_V1/build'
+dataset.fashionai_kp.dataset_path = '/mnt/data/fai_attr/raw_data/ROUND2/TRAIN_V1'
 dataset.fashionai_kp.frequent = 20
 dataset.fashionai_kp.kvstore = 'device'
 dataset.fashionai_kp.e2e_prefix = '/mnt/models/e2e-coco'
