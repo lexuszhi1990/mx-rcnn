@@ -46,3 +46,8 @@ INFO:root:output shape {'bbox_loss_reshape_output': (1, 128, 24),
  'rpn_bbox_loss_output': (1, 36, 19, 19),
  'rpn_cls_prob_output': (1, 2, 171, 19)}
 INFO:root:lr 0.001000 lr_epoch_diff [7] lr_iters [87738]
+
+
+### demo
+
+python3.6 demo.py --prefix model/final --epoch 0 --image pant_length_1.jpg --gpu 0
