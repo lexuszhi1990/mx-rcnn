@@ -7,6 +7,8 @@ from net.logger import logger
 from .imdb import IMDB
 
 # coco api
+import sys
+sys.path.append('/mnt/data/coco/PythonAPI')
 from pycocotools.coco import COCO
 from pycocotools.cocoeval import COCOeval
 

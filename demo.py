@@ -158,7 +158,7 @@ def get_resnet50_test(args):
 def get_resnet101_test(args):
     from net.symbol_resnet import get_resnet_test
     if not args.params:
-        args.params = 'model/resnet101-0010.params'
+        args.params = 'ckpt/resnet101-0010.params'
     args.img_pixel_means = (0.0, 0.0, 0.0)
     args.img_pixel_stds = (1.0, 1.0, 1.0)
     args.rpn_feat_stride = 16

@@ -50,4 +50,7 @@ INFO:root:lr 0.001000 lr_epoch_diff [7] lr_iters [87738]
 
 ### demo
 
-python3.6 demo.py --prefix model/final --epoch 0 --image pant_length_1.jpg --gpu 0
+docker run --rm -it -v /home/david/fashionAI/mx-rcnn:/app  -v /data/david/cocoapi:/mnt/data/coco mxnet/python:1.2.0_gpu_cuda9-dev
+
+python3.6 demo.py --image samples/coat_length_1.jpg --network resnet101 --dataset coco --params ckpt/resnet_coco-0010.params
+
