@@ -155,6 +155,5 @@ def main():
     predictor = get_net(symbol, args.prefix, args.epoch, ctx)
     demo_net(predictor, args.image, args.vis)
 
-
 if __name__ == '__main__':
     main()
