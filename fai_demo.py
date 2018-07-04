@@ -17,9 +17,10 @@
 
 # setup:
 """
-requirements: python3.6 or above, mxnet 1.20 or above
-docker run --rm -it -v /home/david/fashionAI/mx-rcnn:/app  mxnet-cu90/python:1.2.0-roialign
+requirements: python3.5 or above, mxnet 1.20 or above
 
+docker run --rm -it -v /home/david/fashionAI/mx-rcnn:/app mxnet-cu90/python:1.2.0-roialign
+cd /app
 python3.6 fai_demo.py  --gpu 3 --image pant_length_1.jpg
 
 # cpu: detect costs 9.400s
