@@ -14,7 +14,7 @@ from pycocotools.cocoeval import COCOeval
 
 
 class coco(IMDB):
-    classes = ['__background__',  # always index 0
+    classes_bak = ['__background__',  # always index 0
                'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train',
                'truck', 'boat', 'traffic light', 'fire hydrant', 'stop sign',
                'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse', 'sheep',
@@ -43,24 +43,31 @@ class coco(IMDB):
         self._image_file_tmpl = os.path.join(data_path, image_set, '{}')
         # example detections_val2017_results.json
         self._result_file = os.path.join(data_path, 'detections_{}_results.json'.format(image_set))
+
+        self._COCO = COCO(self._anno_file)
+        self.cats = self._COCO.loadCats(self._COCO.getCatIds())
+        self.classes = ['__background__'] + [c['name'] for c in self.cats]
+        self._class_to_ind = dict(zip(self.classes, range(self.num_classes)))
+        self._class_to_coco_cat_id = dict(zip([c['name'] for c in self.cats], self._COCO.getCatIds()))
+
         # get roidb
         self._roidb = self._get_cached('roidb', self._load_gt_roidb)
+
         logger.info('%s num_images %d' % (self.name, self.num_images))
 
     def _load_gt_roidb(self):
-        _coco = COCO(self._anno_file)
         # deal with class names
-        cats = [cat['name'] for cat in _coco.loadCats(_coco.getCatIds())]
-        class_to_coco_ind = dict(zip(cats, _coco.getCatIds()))
-        class_to_ind = dict(zip(self.classes, range(self.num_classes)))
-        coco_ind_to_class_ind = dict([(class_to_coco_ind[cls], class_to_ind[cls])
+        # cats = [cat['name'] for cat in _coco.loadCats(_coco.getCatIds())]
+        # class_to_coco_ind = dict(zip(cats, _coco.getCatIds()))
+        # class_to_ind = dict(zip(self.classes, range(self.num_classes)))
+        coco_ind_to_class_ind = dict([(self._class_to_coco_cat_id[cls], self._class_to_ind[cls])
                                      for cls in self.classes[1:]])
 
-        image_ids = _coco.getImgIds()
-        gt_roidb = [self._load_annotation(_coco, coco_ind_to_class_ind, index) for index in image_ids]
+        image_ids = self._COCO.getImgIds()
+        gt_roidb = [self._load_annotation(coco_ind_to_class_ind, index) for index in image_ids]
         return gt_roidb
 
-    def _load_annotation(self, _coco, coco_ind_to_class_ind, index):
+    def _load_annotation(self, coco_ind_to_class_ind, index):
         """
         coco ann: [u'segmentation', u'area', u'iscrowd', u'image_id', u'bbox', u'category_id', u'id']
         iscrowd:
@@ -71,13 +78,13 @@ class coco(IMDB):
         :param index: coco image id
         :return: roidb entry
         """
-        im_ann = _coco.loadImgs(index)[0]
+        im_ann = self._COCO.loadImgs(index)[0]
         filename = self._image_file_tmpl.format(im_ann['file_name'])
         width = im_ann['width']
         height = im_ann['height']
 
-        annIds = _coco.getAnnIds(imgIds=index, iscrowd=None)
-        objs = _coco.loadAnns(annIds)
+        annIds = self._COCO.getAnnIds(imgIds=index, iscrowd=None)
+        objs = self._COCO.loadAnns(annIds)
 
         # sanitize bboxes
         valid_objs = []
@@ -110,19 +117,18 @@ class coco(IMDB):
         return roi_rec
 
     def _evaluate_detections(self, detections, **kargs):
-        _coco = COCO(self._anno_file)
-        self._write_coco_results(_coco, detections)
-        self._do_python_eval(_coco)
+        self._write_coco_results(self._COCO, detections)
+        self._do_python_eval(self._COCO)
 
-    def _write_coco_results(self, _coco, detections):
+    def _write_coco_results(self, detections):
         """ example results
         [{"image_id": 42,
           "category_id": 18,
           "bbox": [258.15,41.29,348.26,243.78],
           "score": 0.236}, ...]
         """
-        cats = [cat['name'] for cat in _coco.loadCats(_coco.getCatIds())]
-        class_to_coco_ind = dict(zip(cats, _coco.getCatIds()))
+        cats = [cat['name'] for cat in self._COCO.loadCats(self._COCO.getCatIds())]
+        class_to_coco_ind = dict(zip(cats, self._COCO.getCatIds()))
         results = []
         for cls_ind, cls in enumerate(self.classes):
             if cls == '__background__':
@@ -153,9 +159,9 @@ class coco(IMDB):
             results.extend(result)
         return results
 
-    def _do_python_eval(self, _coco):
-        coco_dt = _coco.loadRes(self._result_file)
-        coco_eval = COCOeval(_coco, coco_dt)
+    def _do_python_eval(self):
+        coco_dt = self._COCO.loadRes(self._result_file)
+        coco_eval = COCOeval(self._COCO, coco_dt)
         coco_eval.params.useSegm = False
         coco_eval.evaluate()
         coco_eval.accumulate()

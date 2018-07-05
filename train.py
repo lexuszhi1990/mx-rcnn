@@ -179,7 +179,7 @@ def get_coco(args):
     isets = args.imageset.split('+')
     roidb = []
     for iset in isets:
-        imdb = coco(iset, 'data', 'data/coco')
+        imdb = coco(iset, 'data', '/mnt/data/coco')
         imdb.filter_roidb()
         imdb.append_flipped_images()
         roidb.extend(imdb.roidb)
