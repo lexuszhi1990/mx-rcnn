@@ -58,4 +58,4 @@ python3 demo.py --image samples/coat_length_1.jpg --network resnet101 --dataset 
 python3 train.py --pretrained $IMAGENET_MODEL_FILE$ --network $Network$ --dataset $Dataset$ --gpus $GPUS$
 
 
-python3 train.py --pretrained ckpt/resnet_coco-0010.params --network resnet101 --dataset coco --imageset person_train2017 --gpus 1
+python3 train.py --pretrained ckpt/resnet_coco-0010.params --network resnet101 --dataset coco --imageset person_train2017 --rcnn_num_classes 2 --gpus 1

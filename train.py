@@ -174,8 +174,8 @@ def get_coco(args):
     from imdb.coco import coco
     if not args.imageset:
         args.imageset = 'train2017'
-    args.rcnn_num_classes = len(coco.classes)
 
+    args.rcnn_num_classes = 2
     isets = args.imageset.split('+')
     roidb = []
     for iset in isets:
