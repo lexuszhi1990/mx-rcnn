@@ -50,12 +50,16 @@ INFO:root:lr 0.001000 lr_epoch_diff [7] lr_iters [87738]
 
 ### demo
 
-docker run --rm -it -v /home/david/fashionAI/mx-rcnn:/app  -v /data/david/cocoapi:/mnt/data/coco mxnet/python:1.2.0_gpu_cuda9-dev
+docker run --rm -it -v /home/david/fashionAI/mx-rcnn:/app -v /data/david/cocoapi:/mnt/data/coco mxnet/python:1.2.0_gpu_cuda9-dev
 
 python3 demo.py --image samples/coat_length_1.jpg --network resnet101 --dataset coco --params ckpt/resnet_coco-0010.params
 
-
-python3 train.py --pretrained $IMAGENET_MODEL_FILE$ --network $Network$ --dataset $Dataset$ --gpus $GPUS$
-
-
+train:
+```
 python3 train.py --pretrained ckpt/resnet_coco-0010.params --network resnet101 --dataset coco --imageset person_train2017 --rcnn_num_classes 2 --gpus 1
+```
+
+validate:
+```
+python3 test.py --network resnet101 --dataset coco --params model/resnet101-0002.params --imageset person_val2017 --gpu 4
+```

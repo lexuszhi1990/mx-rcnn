@@ -119,8 +119,8 @@ def get_coco(args):
     from imdb.coco import coco
     if not args.imageset:
         args.imageset = 'val2017'
-    args.rcnn_num_classes = len(coco.classes)
-    return coco(args.imageset, 'data', 'data/coco')
+
+    return coco(args.imageset, 'data', '/mnt/data/coco')
 
 
 def get_vgg16_test(args):
@@ -184,7 +184,11 @@ def get_dataset(dataset, args):
     }
     if dataset not in datasets:
         raise ValueError("dataset {} not supported".format(dataset))
-    return datasets[dataset](args)
+
+    res = datasets[dataset](args)
+    args.rcnn_num_classes = len(res.classes)
+
+    return res
 
 
 def get_network(network, args):
