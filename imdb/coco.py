@@ -117,8 +117,8 @@ class coco(IMDB):
         return roi_rec
 
     def _evaluate_detections(self, detections, **kargs):
-        self._write_coco_results(self._COCO, detections)
-        self._do_python_eval(self._COCO)
+        self._write_coco_results(detections)
+        self._do_python_eval()
 
     def _write_coco_results(self, detections):
         """ example results
@@ -127,18 +127,18 @@ class coco(IMDB):
           "bbox": [258.15,41.29,348.26,243.78],
           "score": 0.236}, ...]
         """
-        cats = [cat['name'] for cat in self._COCO.loadCats(self._COCO.getCatIds())]
-        class_to_coco_ind = dict(zip(cats, self._COCO.getCatIds()))
+        # cats = [cat['name'] for cat in self._COCO.loadCats(self._COCO.getCatIds())]
+        # class_to_coco_ind = dict(zip(self.cats, self._COCO.getCatIds()))
         results = []
         for cls_ind, cls in enumerate(self.classes):
             if cls == '__background__':
                 continue
             logger.info('collecting %s results (%d/%d)' % (cls, cls_ind, self.num_classes - 1))
-            coco_cat_id = class_to_coco_ind[cls]
+            coco_cat_id = self._class_to_coco_cat_id[cls]
             results.extend(self._coco_results_one_category(detections[cls_ind], coco_cat_id))
-        logger.info('writing results json to %s' % self._result_file)
         with open(self._result_file, 'w') as f:
             json.dump(results, f, sort_keys=True, indent=4)
+        logger.info('writing results json to %s' % self._result_file)
 
     def _coco_results_one_category(self, boxes, cat_id):
         results = []

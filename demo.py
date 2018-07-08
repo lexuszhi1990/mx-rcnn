@@ -1,6 +1,7 @@
 import argparse
 import ast
 import pprint
+import time
 
 import mxnet as mx
 from mxnet.module import Module
@@ -46,13 +47,17 @@ def demo_net(sym, class_names, args):
     mod.init_params(arg_params=arg_params, aux_params=aux_params)
 
     # forward
+    forward_starts = time.time()
     mod.forward(data_batch)
     rois, scores, bbox_deltas = mod.get_outputs()
+    rois.wait_to_read()
     rois = rois[:, 1:]
     scores = scores[0]
     bbox_deltas = bbox_deltas[0]
-    im_info = im_info[0]
+    forward_costs = time.time() - forward_starts
+    print("forward costs %.4f" % (forward_costs))
 
+    im_info = im_info[0]
     # decode detection
     det = im_detect(rois, scores, bbox_deltas, im_info,
                     bbox_stds=args.rcnn_bbox_stds, nms_thresh=args.rcnn_nms_thresh,
@@ -65,7 +70,7 @@ def demo_net(sym, class_names, args):
 
     # if vis
     if args.vis:
-        vis_detection(im_orig, det, class_names, thresh=args.vis_thresh)
+        vis_detection(im_orig, det, class_names, thresh=args.vis_thresh, prefix=args.image)
 
 
 def parse_args():
@@ -74,6 +79,7 @@ def parse_args():
     parser.add_argument('--network', type=str, default='resnet50', help='base network')
     parser.add_argument('--params', type=str, default='', help='path to trained model')
     parser.add_argument('--dataset', type=str, default='voc', help='training dataset')
+    parser.add_argument('--imageset', type=str, default='', help='imageset splits')
     parser.add_argument('--image', type=str, default='', help='path to test image')
     parser.add_argument('--gpu', type=str, default='', help='gpu device eg. 0')
     parser.add_argument('--vis', action='store_true', help='display results')
@@ -179,7 +185,41 @@ def get_class_names(dataset, args):
     }
     if dataset not in datasets:
         raise ValueError("dataset {} not supported".format(dataset))
-    return datasets[dataset](args)
+    res = datasets[dataset](args)
+    args.rcnn_num_classes = len(res)
+    import pdb
+    pdb.set_trace()
+
+    return res
+
+def get_voc(args):
+    from imdb.pascal_voc import PascalVOC
+    if not args.imageset:
+        args.imageset = '2007_test'
+    args.rcnn_num_classes = len(PascalVOC.classes)
+    return PascalVOC(args.imageset, 'data', 'data/VOCdevkit')
+
+
+def get_coco(args):
+    from imdb.coco import coco
+    if not args.imageset:
+        args.imageset = 'val2017'
+
+    return coco(args.imageset, 'data', '/mnt/data/coco')
+
+
+def get_dataset(dataset, args):
+    datasets = {
+        'voc': get_voc,
+        'coco': get_coco
+    }
+    if dataset not in datasets:
+        raise ValueError("dataset {} not supported".format(dataset))
+
+    res = datasets[dataset](args)
+    args.rcnn_num_classes = len(res.classes)
+
+    return res
 
 
 def get_network(network, args):
@@ -195,9 +235,9 @@ def get_network(network, args):
 
 def main():
     args = parse_args()
-    class_names = get_class_names(args.dataset, args)
+    imdb = get_dataset(args.dataset, args)
     sym = get_network(args.network, args)
-    demo_net(sym, class_names, args)
+    demo_net(sym, imdb.classes, args)
 
 
 if __name__ == '__main__':
