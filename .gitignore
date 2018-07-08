@@ -80,3 +80,6 @@ target/
 *.params
 *.json
 .vscode/
+
+samples
+data/cache
