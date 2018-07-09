@@ -67,3 +67,8 @@ demo:
 python3 demo.py --network resnet101 --dataset coco --imageset person_val2017 --params model/resnet101-0002.params --gpu 5 --vis --image samples/demo/1045023827_4ec3e8ba5c_z.jpg
 ```
 
+deploy:
+```
+python3 deploy.py --network resnet101 --rcnn_num_classes 2 --prefix ./model/resnet101 --epoch 3 --rpn-post-nms-topk 100
+```
+
