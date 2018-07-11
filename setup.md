@@ -60,6 +60,19 @@ python3 train.py --pretrained ckpt/resnet_coco-0010.params --network resnet101 -
 validate:
 ```
 python3 test.py --network resnet101 --dataset coco --imageset person_val2017 --params model/resnet101-0002.params --gpu 4
+
+Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.371
+Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=100 ] = 0.627
+Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=100 ] = 0.383
+Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.097
+Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.459
+Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.657
+Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=  1 ] = 0.167
+Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets= 10 ] = 0.403
+Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.428
+Average Recall     (AR) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.149
+Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.534
+Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.725
 ```
 
 demo:
