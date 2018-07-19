@@ -12,6 +12,7 @@ from data.loader import TestLoader
 from net.logger import logger
 from net.model import load_param, check_shape
 
+from utils.args import parse_args
 
 def test_net(sym, imdb, args):
     # print config
@@ -68,9 +69,12 @@ def test_net(sym, imdb, args):
 
     # evaluate model
     imdb.evaluate_detections(all_boxes)
+    for i, data_batch in enumerate(test_data):
+        import pdb
+        pdb.set_trace()
 
 
-def parse_args():
+def __parse_args():
     parser = argparse.ArgumentParser(description='Test a Faster R-CNN network',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--network', type=str, default='resnet50', help='base network')
@@ -120,7 +124,7 @@ def get_coco(args):
     if not args.imageset:
         args.imageset = 'val2017'
 
-    return coco(args.imageset, 'data', '/mnt/data/coco')
+    return coco(args.imageset, 'data', args.data_path)
 
 
 def get_vgg16_test(args):

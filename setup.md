@@ -29,6 +29,12 @@ on 177:
 docker run --rm -it -v /home/fulingzhi/workspace/mx-rcnn:/app-dev -v /mnt/gf_mnt/models:/mnt/models -v /mnt/gf_mnt/datasets/cocoapi:/mnt/data/coco -v /mnt/gf_mnt/datasets/VOCdevkit:/mnt/data/VOCdevkit mxnet-cu90/python:1.2.0-roialign
 ```
 
+on ws:
+```
+docker run --rm -it -v /mnt/workspace/david/mx-rcnn:/app -v /mnt/datasets/station_car:/mnt/dataset/car mxnet/python:1.2.0_gpu_cuda9 bash
+```
+
+
 ### local dev
 
 docker run --rm -it -v /Users/david/repo/detection/mx-rcnn:/app-dev -v /Users/david/mnt/data/VOCdevkit:/mnt/data/VOCdevkit -v /Users/david/mnt/data/ckpt:/mnt/ckpt mxnet/python:1.2.0-dev bash
@@ -85,3 +91,11 @@ deploy:
 python3 deploy.py --network resnet101 --rcnn_num_classes 2 --prefix ./model/resnet101 --epoch 3 --rpn-post-nms-topk 100
 ```
 
+
+### train car detection
+
+CUDA_VISIBLE_DEVICES=0 python3 train.py --pretrained ckpt/pretrained/resnet_coco-0010.params --network resnet101 --dataset coco --data_path /mnt/dataset/car --imageset train_a --gpus 0
+
+python3 test.py --network resnet101 --dataset coco --imageset train_b --params model/resnet101-0002.params --gpu 0
+
+python3 car_deploy.py --network resnet101 --dataset coco --imageset test_a --params model/resnet101-0009.params --rcnn-num-classes 2 --gpu 1 --image /mnt/dataset/car/images/test_a/ff9e111c-ff29-4ed5-8c68-9a6fc3d72849.jpg 

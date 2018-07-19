@@ -8,7 +8,7 @@ from .imdb import IMDB
 
 # coco api
 import sys
-sys.path.append('/mnt/data/coco/PythonAPI')
+sys.path.append('3rdparty/cocoapi/PythonAPI')
 from pycocotools.coco import COCO
 from pycocotools.cocoeval import COCOeval
 
@@ -40,7 +40,8 @@ class coco(IMDB):
         # example: annotations/instances_train2017.json
         self._anno_file = os.path.join(data_path, 'annotations', 'instances_' + image_set + '.json')
         # example train2017/000000119993.jpg
-        self._image_file_tmpl = os.path.join(data_path, 'images', image_set.split('_')[-1], '{}')
+        # self._image_file_tmpl = os.path.join(data_path, 'images', image_set.split('_'), '{}')
+        self._image_file_tmpl = os.path.join(data_path, 'images', image_set, '{}')
         # example detections_val2017_results.json
         self._result_file = os.path.join(data_path, 'detections_{}_results.json'.format(image_set))
 
