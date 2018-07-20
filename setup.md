@@ -98,4 +98,7 @@ CUDA_VISIBLE_DEVICES=0 python3 train.py --pretrained ckpt/pretrained/resnet_coco
 
 python3 test.py --network resnet101 --dataset coco --imageset train_b --params model/resnet101-0002.params --gpu 0
 
-python3 car_deploy.py --network resnet101 --dataset coco --imageset test_a --params model/resnet101-0009.params --rcnn-num-classes 2 --gpu 1 --image /mnt/dataset/car/images/test_a/ff9e111c-ff29-4ed5-8c68-9a6fc3d72849.jpg 
+python3 car_deploy.py --network resnet101 --dataset coco --imageset test_a --params model/resnet101-0009.params --rcnn-num-classes 2 --gpu 1 --image /mnt/dataset/car/images/test_a/ff9e111c-ff29-4ed5-8c68-9a6fc3d72849.jpg
+
+
+CUDA_VISIBLE_DEVICES=0 python3 train.py --pretrained ckpt/pretrained/resnet_coco-0010.params --network resnet101 --dataset coco --data_path /mnt/dataset/car --imageset train_a+train_kitti --save_prefix model/v2/rensnet-101 --gpus 0

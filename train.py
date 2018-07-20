@@ -9,7 +9,7 @@ from data.loader import AnchorGenerator, AnchorSampler, AnchorLoader
 from net.logger import logger
 from net.model import load_param, infer_data_shape, check_shape, initialize_frcnn, get_fixed_params
 from net.metric import RPNAccMetric, RPNLogLossMetric, RPNL1LossMetric, RCNNAccMetric, RCNNLogLossMetric, RCNNL1LossMetric
-
+from utils.args import parse_args
 
 def train_net(sym, roidb, args):
     # print config
@@ -103,7 +103,7 @@ def train_net(sym, roidb, args):
             arg_params=arg_params, aux_params=aux_params, begin_epoch=args.start_epoch, num_epoch=args.epochs)
 
 
-def parse_args():
+def _parse_args():
     parser = argparse.ArgumentParser(description='Train Faster R-CNN network',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--network', type=str, default='resnet50', help='base network')
